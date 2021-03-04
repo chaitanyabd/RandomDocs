@@ -1,0 +1,27 @@
+NPCI UPI Specifications for Deep Linking
+bgagan911 edited this page on Dec 6, 2019 · 2 revisions
+UPI Deep Linking Specs
+Sample URI : upi://pay?parm-name=param-value&param-name=pram-value&…
+
+Param	Description	Data Type	Static Tag	Dynamic Tag	Long Description
+pa	VPA Address	String	M	M	Payee VPA
+pn	Payee Name	String	M	M	Payee Name
+mc	Payee Merchant Code	String	O	O	Payee merchant code If present then needs to be passed as it is.
+tid	Transaction ID	String	O	O	This must be PSP generated id when present. In the case of Merchant payments, merchant may acquire the txn id from his PSP. If present then needs to be passed as it is
+tr	Transaction Reference ID	String	O	C	Transaction reference ID. This could be order number, subscription number, Bill ID, booking ID, insurance renewal reference, etc. This field is Mandatory for Merchant transactions and dynamic URL generation
+tn	Transaction Note	String	O	O	Transaction note providing a short description of the transaction.
+am	Transaction Amount	String	O	M	Transaction amount in decimal format.
+mam	Minimum Amount	String	O	C	Minimum amount to be paid if different from transaction amount.
+cu	Currency Code	String	O	O	Currency code. Currently ONLY “INR” is the supported value.
+url		String	O	O	This should be a URL when clicked provides customer with further transaction details like complete bill details, bill copy, order copy, ticket details, etc. This can also be used to deliver digital goods such as mp3 files etc. after payment. This URL, when used, MUST BE related to the particular transaction and MUST NOT be used to send unsolicited information that are not relevant to the transaction.
+NOTE:
+
+url :The parameters present in the URL should be passed as it is in the online message by the PSP application.
+mam :This parameter is conditional and shall be used to define a minimum amount rule where amount field in PSP app is editable. If mam tag is not present or ‘mam=null’ or ‘mam=’ then amount field should NOT be editable.
+NOTE : If a customer enters the value less than value passed in mam then UPI will decline the transaction. To reduce such declines PSP application should not allow entry of amount below mam value.
+
+Null values :This needs to be handled by PSP as Null value and should not passed into online message directly as a string value “null”.
+Space : Space shall be handled as per below
+While generating/creating/Reading a QR, intent, NFC, BLE, UHF etc. space (“ ”) should be represented as “%20” and not “%”as to be compliant with existing Internet Standard RFC 3986 section 2.1 Percent-Encoding.
+
+Note: Considering that the current PSP apps are developed to read “%” as space (“ ”), the Bank PSP should support both “%” and “%20”, till such time the ecosystem is aligned to the revision. Hence, backward compatibility should be ensured.
